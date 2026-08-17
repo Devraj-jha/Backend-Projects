@@ -1,0 +1,38 @@
+ backend is the server side of the programme.
+
+ it handles all the logic, authenetication etc
+
+ frontend -> ui
+ backend -> actually processing stuff happens..
+
+ api -> the communication interface between two points
+
+ database -> data storage places
+
+
+ imagine we login in the website.
+
+  it sends to backend.
+  it receivews the request 
+  validate data 
+  find user in the data base.
+  checks the password
+  creates authentication / tokens
+  sends a resposne back
+
+  broswer sends a request. 
+  server processes and sends a response 
+
+  | Method     | Purpose                   | Example            |
+| ---------- | ------------------------- | ------------------ |
+| **GET**    | Retrieve data             | Get users          |
+| **POST**   | Create data               | Create user        |
+| **PUT**    | Replace entire resource   | Replace user       |
+| **PATCH**  | Partially modify resource | Change user's name |
+| **DELETE** | Delete resource           | Delete user        |
+
+
+get -> retrieve data
+post -> create data 
+
+

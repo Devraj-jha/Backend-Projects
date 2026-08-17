@@ -1,0 +1,50 @@
+status code tells the client what happens.
+
+2xx -> ok
+4xx -> cleint request problem 
+5xx -> server problem
+
+
+200 → OK
+201 → Created
+
+400 → Bad Request
+401 → Unauthorized
+403 → Forbidden
+404 → Not Found
+
+500 → Internal Server Error
+             HTTP STATUS CODES
+
+                   2xx
+                    │
+                 SUCCESS
+                    │
+             ┌──────┴──────┐
+            200           201
+            OK          Created
+
+
+                   4xx
+                    │
+             REQUEST PROBLEM
+                    │
+       ┌────────────┼────────────┐
+      400          401           403
+     Bad         Not Auth      Forbidden
+    Request
+
+
+                   404
+                    │
+               Not Found
+
+
+                   5xx
+                    │
+              SERVER PROBLEM
+                    │
+                   500
+            Internal Error
+
+            

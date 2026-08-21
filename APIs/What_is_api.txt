@@ -1,0 +1,21 @@
+API = a way for two piece of software to communicate with each other..
+
+REST = Representational State Transfer.
+
+Rest is basically the set of rules when we try to desgin our apis. 
+
+API
+    -> REST API
+    -> GRAPHQL API
+    -> WEB SOCKET API 
+
+represent users as resources And describe what you want to do with them..
+
+rest api represents a thing
+
+so resources represnt nouns bascailly
+http methods tells us operations 
+
+
+Statelessness = Every request is complete in itself and does not depend on previous requests.
+

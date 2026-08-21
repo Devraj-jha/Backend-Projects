@@ -1,0 +1,27 @@
+header ->> Extra information about the reqest or response 
+
+
+route -> some rules that connects a url to a page 
+
+mapping betwwen a url path and a page 
+
+
+HTTP REQUEST COMPONENTS
+
+1. Headers
+   → Metadata/information about request
+   → Authorization, Content-Type, Accept
+
+2. Query Parameters
+   → Filter/search/sort/pagination
+   → /products?category=books&page=2
+
+3. Route Parameters
+   → Identify a specific resource
+   → /users/:id
+   → /users/42
+
+4. Request Body
+   → Actual data sent to server
+   → Mainly POST, PUT, PATCH
+   → Usually JSON

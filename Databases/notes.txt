@@ -1,0 +1,10 @@
+sql -> which is a used to talk to database
+
+sql is a language used to talk to databases such as postgresql
+
+// create a table 
+
+create table users{
+    some sytax here
+}
+

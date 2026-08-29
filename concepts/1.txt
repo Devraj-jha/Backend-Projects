@@ -4,3 +4,7 @@ design patterns
 data bases 
 relational non relational
 
+route is a rule/ path on a backend server that tells what to do whena. 
+
+a. specific request arrives at that door. 
+

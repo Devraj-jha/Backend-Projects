@@ -1,2 +1,4 @@
 backend-roadmap.md
 node_modules
+.env
+atlas-credentials.env

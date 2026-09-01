@@ -8,3 +8,12 @@ create table users{
     some sytax here
 }
 
+data base is a system for storing and retriving data . 
+
+we need to store data. 
+
+// 
+theoritcally we can save but what about 10m users..
+
+/ 
+

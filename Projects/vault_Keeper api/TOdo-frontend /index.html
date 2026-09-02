@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do · minimal</title>
+  <!-- clean, minimal styling – no framework, just a touch of air -->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #f7f9fc;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    .todo-card {
+      max-width: 580px;
+      width: 100%;
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem 1.8rem 2.2rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.03);
+      transition: box-shadow 0.2s;
+    }
+    h1 {
+      font-weight: 500;
+      font-size: 1.9rem;
+      letter-spacing: -0.02em;
+      color: #1e293b;
+      margin-bottom: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    h1 span {
+      background: #eef2f6;
+      font-size: 1rem;
+      font-weight: 450;
+      padding: 0.1rem 0.8rem;
+      border-radius: 30px;
+      color: #2c3e50;
+      margin-left: 0.3rem;
+    }
+    .add-section {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 2.2rem;
+    }
+    .add-section input {
+      flex: 1;
+      padding: 0.7rem 1rem;
+      border: 1px solid #dce2ea;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      background: white;
+      transition: 0.2s;
+      outline: none;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .add-section input:focus {
+      border-color: #8ba0b9;
+      box-shadow: 0 0 0 3px rgba(139, 160, 185, 0.15);
+    }
+    .add-section button {
+      background: #1e293b;
+      color: white;
+      border: none;
+      border-radius: 40px;
+      padding: 0.7rem 1.6rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.15s;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+      box-shadow: 0 2px 6px rgba(30, 41, 59, 0.12);
+    }
+    .add-section button:hover {
+      background: #0f172a;
+      transform: scale(0.97);
+    }
+    .add-section button:active {
+      background: #1e293b;
+      transform: scale(0.95);
+    }
+    .task-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .task-item {
+      background: #f8fafc;
+      border-radius: 60px;
+      padding: 0.3rem 0.3rem 0.3rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      border: 1px solid #e9edf2;
+      transition: background 0.15s, border-color 0.15s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .task-item:hover {
+      background: #ffffff;
+      border-color: #d0d9e3;
+    }
+    .task-item .task-title {
+      flex: 1;
+      font-size: 0.98rem;
+      padding: 0.3rem 0;
+      color: #1e293b;
+      word-break: break-word;
+    }
+    .task-item.done .task-title {
+      text-decoration: line-through;
+      color: #8b9eb0;
+    }
+    .task-item .task-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      flex-shrink: 0;
+    }
+    /* custom checkbox – minimal but visible */
+    .task-item input[type="checkbox"] {
+      width: 1.2rem;
+      height: 1.2rem;
+      accent-color: #1e293b;
+      cursor: pointer;
+      margin: 0;
+      border-radius: 6px;
+      transition: 0.1s;
+      flex-shrink: 0;
+    }
+    .task-item input[type="checkbox"]:hover {
+      transform: scale(1.05);
+    }
+    .delete-btn {
+      background: transparent;
+      border: none;
+      color: #a0b3c9;
+      font-size: 1.3rem;
+      line-height: 1;
+      padding: 0.4rem 0.9rem 0.4rem 0.7rem;
+      margin: 0;
+      cursor: pointer;
+      border-radius: 40px;
+      transition: 0.15s;
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .delete-btn:hover {
+      background: #fee9e7;
+      color: #c24a3a;
+    }
+    .delete-btn:active {
+      background: #fcd8d4;
+      transform: scale(0.93);
+    }
+    .empty-message {
+      color: #94a3b8;
+      text-align: center;
+      padding: 2.2rem 0.5rem;
+      font-size: 0.95rem;
+      background: #fafcff;
+      border-radius: 60px;
+      border: 1px dashed #dce2ea;
+    }
+    .status-badge {
+      font-size: 0.7rem;
+      background: #eef2f6;
+      padding: 0.15rem 0.6rem;
+      border-radius: 40px;
+      color: #2c3e50;
+      margin-left: 0.2rem;
+      font-weight: 450;
+      letter-spacing: 0.02em;
+    }
+    .footer-note {
+      margin-top: 1.8rem;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      text-align: center;
+      border-top: 1px solid #edf2f7;
+      padding-top: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="todo-card">
+  <h1>
+    ✧ tasks
+    <span id="taskCount">0</span>
+  </h1>
+
+  <!-- add task -->
+  <div class="add-section">
+    <input type="text" id="taskInput" placeholder="write a task …" autofocus />
+    <button id="addTaskBtn">+ add</button>
+  </div>
+
+  <!-- task list container -->
+  <ul class="task-list" id="taskList">
+    <!-- tasks will be rendered here -->
+  </ul>
+  <div class="footer-note">✔ toggle · ✖ delete</div>
+</div>
+
+<script>
+  (function() {
+    "use strict";
+
+    // ---------- API base ----------
+    const API_BASE = 'http://localhost:3000/tasks';
+
+    // ---------- DOM refs ----------
+    const taskListEl = document.getElementById('taskList');
+    const taskInput = document.getElementById('taskInput');
+    const addBtn = document.getElementById('addTaskBtn');
+    const taskCountSpan = document.getElementById('taskCount');
+
+    // ---------- helpers ----------
+    function updateTaskCount(tasks) {
+      const count = tasks ? tasks.length : 0;
+      taskCountSpan.textContent = count;
+    }
+
+    // ---------- render tasks ----------
+    function renderTasks(tasks) {
+      // clear list
+      taskListEl.innerHTML = '';
+
+      if (!tasks || tasks.length === 0) {
+        const emptyLi = document.createElement('li');
+        emptyLi.className = 'empty-message';
+        emptyLi.textContent = '✧ no tasks yet · add one above';
+        taskListEl.appendChild(emptyLi);
+        updateTaskCount([]);
+        return;
+      }
+
+      // sort: undone first (done: false) then done (done: true) – simple UX
+      const sorted = [...tasks].sort((a, b) => {
+        if (a.done === b.done) return 0;
+        return a.done ? 1 : -1;
+      });
+
+      // fragment for performance
+      const fragment = document.createDocumentFragment();
+
+      sorted.forEach(task => {
+        const li = document.createElement('li');
+        li.className = 'task-item' + (task.done ? ' done' : '');
+        li.dataset.id = task._id;
+
+        // --- checkbox (toggle done) ---
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.done === true;
+        checkbox.setAttribute('aria-label', 'Toggle task done status');
+
+        // --- title span ---
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'task-title';
+        titleSpan.textContent = task.title || 'untitled';
+
+        // --- action wrapper ---
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'task-actions';
+
+        // --- delete button ---
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = '✕'; // multiply sign
+        deleteBtn.setAttribute('aria-label', 'Delete task');
+
+        // assemble
+        actionsDiv.appendChild(deleteBtn);
+        li.appendChild(checkbox);
+        li.appendChild(titleSpan);
+        li.appendChild(actionsDiv);
+        fragment.appendChild(li);
+
+        // ---- event: toggle done (PATCH) ----
+        checkbox.addEventListener('change', async function(e) {
+          e.stopPropagation();
+          const newDone = this.checked;
+          const taskId = li.dataset.id;
+          if (!taskId) return;
+
+          // optimistic UI update (visual feedback)
+          li.classList.toggle('done', newDone);
+
+          try {
+            await patchTask(taskId, newDone);
+            // re-fetch to keep in sync with server (in case backend changes something)
+            await fetchAndRefresh();
+          } catch (error) {
+            console.error('PATCH error:', error);
+            // revert checkbox state on error
+            this.checked = !newDone;
+            li.classList.toggle('done', !newDone);
+            // show a simple alert – but we keep it minimal
+            alert('Failed to update task. Check console or server.');
+          }
+        });
+
+        // ---- event: delete (DELETE) ----
+        deleteBtn.addEventListener('click', async function(e) {
+          e.stopPropagation();
+          const taskId = li.dataset.id;
+          if (!taskId) return;
+          // small confirmation (optional) – but we keep it smooth
+          if (!confirm(`Delete "${task.title || 'task'}" ?`)) return;
+
+          try {
+            await deleteTask(taskId);
+            // remove from DOM immediately (optimistic)
+            li.remove();
+            // refresh count
+            const currentTasks = getTasksFromDOM();
+            updateTaskCount(currentTasks);
+            // additionally fetch to sync (in case of server-side changes)
+            await fetchAndRefresh();
+          } catch (error) {
+            console.error('DELETE error:', error);
+            alert('Failed to delete task. Check console or server.');
+          }
+        });
+      });
+
+      taskListEl.appendChild(fragment);
+      updateTaskCount(tasks);
+    }
+
+    // helper: get tasks from current DOM (for count)
+    function getTasksFromDOM() {
+      const items = taskListEl.querySelectorAll('.task-item');
+      const tasks = [];
+      items.forEach(li => {
+        const id = li.dataset.id;
+        const titleSpan = li.querySelector('.task-title');
+        const checkbox = li.querySelector('input[type="checkbox"]');
+        if (id && titleSpan) {
+          tasks.push({
+            _id: id,
+            title: titleSpan.textContent,
+            done: checkbox ? checkbox.checked : false,
+          });
+        }
+      });
+      return tasks;
+    }
+
+    // ---------- API calls ----------
+    async function fetchTasks() {
+      const response = await fetch(API_BASE);
+      if (!response.ok) {
+        throw new Error(`GET /tasks failed: ${response.status} ${response.statusText}`);
+      }
+      return await response.json();
+    }
+
+    async function createTask(title) {
+      const response = await fetch(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title }),
+      });
+      if (!response.ok) {
+        let errMsg = `POST /tasks failed: ${response.status}`;
+        try {
+          const errData = await response.json();
+          if (errData && errData.message) errMsg += ` — ${errData.message}`;
+        } catch (_) { /* ignore */ }
+        throw new Error(errMsg);
+      }
+      return await response.json();
+    }
+
+    async function patchTask(id, done) {
+      const response = await fetch(`${API_BASE}/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ done }),
+      });
+      if (!response.ok) {
+        let errMsg = `PATCH /tasks/${id} failed: ${response.status}`;
+        try {
+          const errData = await response.json();
+          if (errData && errData.message) errMsg += ` — ${errData.message}`;
+        } catch (_) { /* ignore */ }
+        throw new Error(errMsg);
+      }
+      return await response.json();
+    }
+
+    async function deleteTask(id) {
+      const response = await fetch(`${API_BASE}/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        let errMsg = `DELETE /tasks/${id} failed: ${response.status}`;
+        try {
+          const errData = await response.json();
+          if (errData && errData.message) errMsg += ` — ${errData.message}`;
+        } catch (_) { /* ignore */ }
+        throw new Error(errMsg);
+      }
+      // DELETE may return 204 No Content – we don't need to parse
+      return true;
+    }
+
+    // ---------- fetch and refresh UI ----------
+    async function fetchAndRefresh() {
+      try {
+        const tasks = await fetchTasks();
+        renderTasks(tasks);
+      } catch (error) {
+        console.error('Fetch/refresh error:', error);
+        alert('Cannot connect to backend. Make sure server is running at http://localhost:3000');
+        // show empty state with error hint
+        taskListEl.innerHTML = `<li class="empty-message" style="border-color: #f4c2c2; color: #b34a4a;">⚠️ couldn’t load tasks · check server</li>`;
+        updateTaskCount([]);
+      }
+    }
+
+    // ---------- add new task ----------
+    async function handleAddTask() {
+      const title = taskInput.value.trim();
+      if (!title) {
+        alert('Please enter a task title.');
+        return;
+      }
+
+      // disable button briefly to prevent double-submit
+      addBtn.disabled = true;
+      addBtn.textContent = '…';
+
+      try {
+        const newTask = await createTask(title);
+        // refresh list from server (to get the exact _id and order)
+        await fetchAndRefresh();
+        taskInput.value = '';
+        taskInput.focus();
+      } catch (error) {
+        console.error('Add task error:', error);
+        alert(`Could not add task: ${error.message || 'unknown error'}`);
+      } finally {
+        addBtn.disabled = false;
+        addBtn.textContent = '+ add';
+      }
+    }
+
+    // ---------- init ----------
+    async function init() {
+      // load tasks on page load
+      await fetchAndRefresh();
+
+      // event listeners
+      addBtn.addEventListener('click', handleAddTask);
+      taskInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAddTask();
+        }
+      });
+    }
+
+    // start app
+    init().catch(err => {
+      console.error('Init error:', err);
+      taskListEl.innerHTML = `<li class="empty-message" style="border-color: #f4c2c2;">⚠️ initialization error · see console</li>`;
+    });
+
+  })();
+</script>
+</body>
+</html>

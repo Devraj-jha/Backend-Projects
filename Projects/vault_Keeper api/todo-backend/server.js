@@ -6,12 +6,12 @@ const Task = require('./models/task');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
-
+require('dotenv').config();
 const mongoose = require("mongoose");
 const task = require("./models/task");
 
 
-require('dotenv').config();
+
 const PORT = 3000;
 
 app.use(cors());
@@ -26,6 +26,72 @@ app.get('/', (req, res) => {
     res.send("<h1>Hello World!</h1><p>Welcome to my website.</p>");
 });
 
+app.post('/signup', async (req,res ) => {
+    try {
+        const { email , password} = req.body;
+
+
+        const hasPassword = await bcrypt.hash(password, 10);
+
+        const user = new User ({
+            email : email,
+            password : hasPassword
+        })
+
+        await user.save();
+
+        res.status(201).json ({
+            message: "account created",
+            UserId: user._id
+        }) 
+
+
+    }catch (err){
+        res.status(400).json({
+            error: "signup failed",
+            details: err.message
+        })
+    }
+})
+
+
+async function login(req ,res){
+
+    const user = await User.findOne({
+        email: req.body.email
+    })
+
+    if(!user){
+        return res.status(401).json({
+            error: 'invalid credentials'
+        })
+    }
+
+    const isMatch = await bcrypt.compare(
+        req.body.password,
+        user.password
+    );
+
+    if(!isMatch){
+        return res.status(401).json({
+            error: "invaid password"
+        }
+        );
+
+    };
+
+    const token = jwt.sign(
+        {id : user._id},
+        process.env.JWT_SECRET,
+        {expiresIn: '1h'}
+    )
+
+    res.json({token});
+    
+};
+
+
+app.post('/login', login)
 app.get('/tasks', async(req, res) => {
    const tasks = await Task.find(); 
 
